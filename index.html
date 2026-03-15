@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1280, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Working of the Heart — G7 to NEET</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -36,11 +36,56 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Source Serif 4', Georgia, serif;
-  min-width: 1280px;
-  min-height: 720px;
 }
 
-/* ── SLIDES ──────────────────────────────────────────────────────── */
+/* ── SCALE-TO-FIT STAGE (locks 1280×720, scales to any screen) ────── */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+#stage {
+  width: 1280px;
+  height: 720px;
+  position: relative;
+  flex-shrink: 0;
+  transform-origin: center center;
+  background: var(--bg);
+  overflow: hidden;
+}
+/* deck fills stage */
+.deck {
+  position: absolute;
+  inset: 0;
+  width: 1280px;
+  height: 720px;
+}
+
+/* rotate hint shown in portrait on mobile */
+#rotate-hint {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+#rotate-hint svg {
+  animation: spin 2s ease-in-out infinite alternate;
+}
+@keyframes spin {
+  from { transform: rotate(-20deg); }
+  to   { transform: rotate(20deg); }
+}
 .deck { position: relative; width: 100vw; height: 100vh; }
 
 .slide {
@@ -419,9 +464,9 @@ html, body {
   display: block;
 }
 
-/* ── UI CHROME ────────────────────────────────────────────────────── */
+/* ── UI CHROME — positioned inside #stage ────────────────────────── */
 .slide-counter {
-  position: fixed;
+  position: absolute;
   bottom: 24px; right: 28px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -430,7 +475,7 @@ html, body {
   letter-spacing: 0.1em;
 }
 .nav-row {
-  position: fixed;
+  position: absolute;
   bottom: 18px; left: 50%;
   transform: translateX(-50%);
   display: flex; gap: 8px;
@@ -451,7 +496,7 @@ html, body {
 .nbtn:hover { border-color: var(--red); color: var(--red); }
 .nbtn.draw-on { border-color: var(--amber); color: var(--amber); }
 .fs-btn {
-  position: fixed;
+  position: absolute;
   top: 18px; right: 18px;
   background: var(--card);
   border: 1px solid var(--border);
@@ -468,7 +513,7 @@ html, body {
 
 /* section indicator top-left */
 .sec-indicator {
-  position: fixed;
+  position: absolute;
   top: 18px; left: 28px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
@@ -480,7 +525,7 @@ html, body {
 
 /* progress pips */
 .pips {
-  position: fixed;
+  position: absolute;
   top: 50%; right: 14px;
   transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 5px;
@@ -496,10 +541,10 @@ html, body {
 .pip.on { background: var(--red); transform: scale(1.6); }
 
 /* draw mode */
-#draw-canvas { position: fixed; inset: 0; z-index: 900; display: none; cursor: crosshair; }
+#draw-canvas { position: absolute; inset: 0; z-index: 900; display: none; cursor: crosshair; width: 1280px !important; height: 720px !important; }
 body.draw-mode #draw-canvas { display: block; }
 .draw-hint {
-  position: fixed;
+  position: absolute;
   top: 18px; left: 50%;
   transform: translateX(-50%);
   background: var(--red); color: #fff;
@@ -507,6 +552,7 @@ body.draw-mode #draw-canvas { display: block; }
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px; letter-spacing: 0.12em;
   display: none; z-index: 950;
+  white-space: nowrap;
 }
 body.draw-mode .draw-hint { display: block; }
 
@@ -529,6 +575,18 @@ body.draw-mode .draw-hint { display: block; }
 <div class="draw-hint">✏ DRAW MODE — A to toggle · C to clear</div>
 <canvas id="draw-canvas"></canvas>
 
+<!-- rotate hint for portrait mobile -->
+<div id="rotate-hint">
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="4" width="28" height="40" rx="4" stroke="white" stroke-width="2.5"/>
+    <path d="M30 44 L38 44 L38 36" stroke="#e63946" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M38 44 C38 38 44 32 44 24" stroke="#e63946" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+  </svg>
+  <span>Rotate your phone<br>for best experience</span>
+  <span style="color:#4a4a68;font-size:10px;">tap to continue anyway</span>
+</div>
+
+<div id="stage">
 <div class="deck" id="deck">
 
 <!-- ══════════════════════════════════════════════════════════════════
@@ -1181,21 +1239,61 @@ body.draw-mode .draw-hint { display: block; }
 
 </div><!-- end deck -->
 
-<!-- ── UI CHROME ──────────────────────────────────────────────────────── -->
+<!-- ── UI CHROME — inside #stage so they scale with it ── -->
 <div class="sec-indicator" id="sec-ind">Grade 7</div>
 <div class="slide-counter" id="sc">01 / 24</div>
 <div class="pips" id="pips"></div>
 <button class="fs-btn" onclick="toggleFS()">⛶ Fullscreen</button>
-
 <div class="nav-row">
   <button class="nbtn" onclick="go(-1)">← Prev</button>
   <button class="nbtn" id="drawBtn" onclick="toggleDraw()">✏ Annotate</button>
   <button class="nbtn" onclick="clearDraw()">⊘ Clear</button>
   <button class="nbtn" onclick="go(1)">Next →</button>
 </div>
+<div class="draw-hint">✏ DRAW MODE — A to toggle · C to clear</div>
+<canvas id="draw-canvas"></canvas>
+
+</div><!-- end stage -->
 
 <script>
-// ── SECTION LABELS ──────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// SCALE-TO-FIT ENGINE
+// Always renders at 1280×720, scaled to fill any screen
+// ═══════════════════════════════════════════════════════════
+const DESIGN_W = 1280;
+const DESIGN_H = 720;
+const stage = document.getElementById('stage');
+
+function scaleStage() {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const scale = Math.min(vw / DESIGN_W, vh / DESIGN_H);
+  stage.style.transform = `scale(${scale})`;
+  // center it
+  stage.style.marginLeft = `${(vw - DESIGN_W) / 2}px`;
+  stage.style.marginTop  = `${(vh - DESIGN_H) / 2}px`;
+}
+scaleStage();
+window.addEventListener('resize', scaleStage);
+window.addEventListener('orientationchange', () => setTimeout(scaleStage, 150));
+
+// ── ROTATE HINT ─────────────────────────────────────────────
+const rotateHint = document.getElementById('rotate-hint');
+function checkOrientation() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+  // show hint only on small screens in portrait (phones)
+  const isPhone = Math.min(window.innerWidth, window.innerHeight) < 600;
+  if (rotateHint) {
+    rotateHint.style.display = (isPortrait && isPhone) ? 'flex' : 'none';
+  }
+}
+checkOrientation();
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 150));
+// tap hint to dismiss
+if(rotateHint) rotateHint.addEventListener('click', () => rotateHint.style.display = 'none');
+
+// ── SECTION LABELS ──────────────────────────────────────────
 const sectionMap = {
   1:'Overview', 2:'Grade 7', 3:'Grade 7', 4:'Grade 7', 5:'Grade 7',
   6:'Grade 10', 7:'Grade 10', 8:'Grade 10', 9:'Grade 10', 10:'Grade 10', 11:'Grade 10',
@@ -1203,7 +1301,7 @@ const sectionMap = {
   18:'NEET', 19:'NEET', 20:'NEET', 21:'NEET', 22:'NEET', 23:'NEET', 24:'Summary'
 };
 
-// ── NAVIGATION STATE ────────────────────────────────────────────────
+// ── NAVIGATION ───────────────────────────────────────────────
 let cur = 0;
 const slides = document.querySelectorAll('.slide');
 const N = slides.length;
@@ -1211,12 +1309,11 @@ const scEl = document.getElementById('sc');
 const secEl = document.getElementById('sec-ind');
 const pipsEl = document.getElementById('pips');
 
-// Build pips
-for(let i=0;i<N;i++){
+for(let i = 0; i < N; i++){
   const d = document.createElement('div');
-  d.className = 'pip'+(i===0?' on':'');
+  d.className = 'pip' + (i === 0 ? ' on' : '');
   d.title = `Slide ${i+1}`;
-  d.addEventListener('click', ()=>showSlide(i));
+  d.addEventListener('click', () => showSlide(i));
   pipsEl.appendChild(d);
 }
 
@@ -1226,11 +1323,12 @@ function showSlide(n){
   slides[cur].classList.add('active');
   scEl.textContent = String(cur+1).padStart(2,'0') + ' / ' + String(N).padStart(2,'0');
   secEl.textContent = sectionMap[cur+1] || '';
-  document.querySelectorAll('.pip').forEach((p,i) => p.classList.toggle('on', i===cur));
+  document.querySelectorAll('.pip').forEach((p,i) => p.classList.toggle('on', i === cur));
 }
 
-function go(d){ showSlide(cur+d); }
+function go(d){ showSlide(cur + d); }
 
+// keyboard
 document.addEventListener('keydown', e => {
   if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') { e.preventDefault(); go(1); }
   if(e.key==='ArrowLeft'||e.key==='ArrowUp') { e.preventDefault(); go(-1); }
@@ -1239,57 +1337,64 @@ document.addEventListener('keydown', e => {
   if(e.key.toLowerCase()==='f') toggleFS();
 });
 
-// ── DRAW CANVAS ─────────────────────────────────────────────────────
+// swipe on mobile
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', e => {
+  if(drawMode) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if(Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+}, {passive:true});
+
+// ── DRAW CANVAS ──────────────────────────────────────────────
 const canvas = document.getElementById('draw-canvas');
 const ctx = canvas.getContext('2d');
+canvas.width = DESIGN_W;
+canvas.height = DESIGN_H;
 let drawing = false, drawMode = false;
-let drawColor = '#f4c542';
 
-function resizeDC(){
-  const id = ctx.getImageData(0,0,canvas.width,canvas.height);
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-  ctx.putImageData(id,0,0);
-  applyCtx();
-}
 function applyCtx(){
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.strokeStyle = drawColor;
-  ctx.lineWidth = 3;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#f4c542'; ctx.lineWidth = 3;
 }
-resizeDC();
-window.addEventListener('resize', resizeDC);
+applyCtx();
 
 function toggleDraw(){
   drawMode = !drawMode;
   document.body.classList.toggle('draw-mode', drawMode);
   document.getElementById('drawBtn').classList.toggle('draw-on', drawMode);
 }
-function clearDraw(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
+function clearDraw(){ ctx.clearRect(0, 0, DESIGN_W, DESIGN_H); }
 
-function getPos(e){
-  return e.touches
-    ? {x: e.touches[0].clientX, y: e.touches[0].clientY}
-    : {x: e.clientX, y: e.clientY};
+// convert screen coords → stage coords (accounts for scaling)
+function stagePos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = DESIGN_W / rect.width;
+  const scaleY = DESIGN_H / rect.height;
+  const src = e.touches ? e.touches[0] : e;
+  return {
+    x: (src.clientX - rect.left) * scaleX,
+    y: (src.clientY - rect.top)  * scaleY
+  };
 }
-canvas.addEventListener('mousedown', e=>{ if(!drawMode)return; drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
-canvas.addEventListener('mousemove', e=>{ if(!drawMode||!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
-canvas.addEventListener('mouseup', ()=>{ drawing=false; });
-canvas.addEventListener('mouseleave', ()=>{ drawing=false; });
-canvas.addEventListener('touchstart', e=>{ if(!drawMode)return; e.preventDefault(); drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); },{passive:false});
-canvas.addEventListener('touchmove', e=>{ if(!drawMode||!drawing)return; e.preventDefault(); const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
-canvas.addEventListener('touchend', ()=>{ drawing=false; });
 
-// ── FULLSCREEN ───────────────────────────────────────────────────────
+canvas.addEventListener('mousedown',  e => { if(!drawMode)return; drawing=true; const p=stagePos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
+canvas.addEventListener('mousemove',  e => { if(!drawMode||!drawing)return; const p=stagePos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+canvas.addEventListener('mouseup',    () => drawing=false);
+canvas.addEventListener('mouseleave', () => drawing=false);
+canvas.addEventListener('touchstart', e => { if(!drawMode)return; e.preventDefault(); drawing=true; const p=stagePos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); }, {passive:false});
+canvas.addEventListener('touchmove',  e => { if(!drawMode||!drawing)return; e.preventDefault(); const p=stagePos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); }, {passive:false});
+canvas.addEventListener('touchend',   () => drawing=false);
+
+// ── FULLSCREEN ───────────────────────────────────────────────
 function toggleFS(){
   if(!document.fullscreenElement) document.documentElement.requestFullscreen();
   else document.exitFullscreen();
 }
 
-// ── QUIZ ─────────────────────────────────────────────────────────────
+// ── QUIZ ─────────────────────────────────────────────────────
 function qa(el, result){
-  el.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('ok','no'));
+  el.closest('.opts').querySelectorAll('.opt').forEach(o => o.classList.remove('ok','no'));
   el.classList.add(result);
 }
 </script>
