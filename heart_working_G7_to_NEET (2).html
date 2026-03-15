@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Working of the Heart — G7 to NEET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:        #09090d;
+  --surface:   #111118;
+  --card:      #16161f;
+  --border:    #222235;
+  --red:       #e63946;
+  --red-dim:   #7a1a20;
+  --amber:     #f4a261;
+  --teal:      #2ec4b6;
+  --violet:    #a78bfa;
+  --text:      #e4e4f0;
+  --muted:     #4a4a68;
+  --light:     #8a8aaa;
+
+  /* section accent colors */
+  --g7:    #f4c542;
+  --g10:   #f4a261;
+  --g11:   #2ec4b6;
+  --comp:  #e63946;
+}
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+}
+
+/* ── SLIDES ──────────────────────────────────────────────────────── */
+.deck { position: relative; width: 100vw; height: 100vh; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+/* Teacher zone — left 30%, completely clean */
+.tz {
+  width: 30%;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+}
+.tz-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+/* Content zone — right 70% */
+.cz {
+  width: 70%;
+  height: 100%;
+  padding: 52px 64px 90px 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.cz.scrollable {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.cz.scrollable::-webkit-scrollbar { display: none; }
+
+/* ── SECTION DIVIDERS ─────────────────────────────────────────────── */
+.slide-divider .cz {
+  justify-content: center;
+  align-items: flex-start;
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 5.5vw, 76px);
+  font-weight: 900;
+  line-height: 1.0;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: clamp(15px, 1.6vw, 20px);
+  color: var(--light);
+  font-style: italic;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+.grade-badge {
+  display: inline-block;
+  padding: 7px 20px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* ── TYPOGRAPHY SYSTEM ─────────────────────────────────────────────── */
+.slide-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding: 4px 12px;
+  border-radius: 2px;
+  display: inline-block;
+  font-weight: 500;
+}
+.tag-g7   { background: rgba(244,197,66,0.15);  color: var(--g7);   }
+.tag-g10  { background: rgba(244,162,97,0.15);  color: var(--g10);  }
+.tag-g11  { background: rgba(46,196,182,0.15);  color: var(--g11);  }
+.tag-comp { background: rgba(230,57,70,0.15);   color: var(--comp); }
+
+.slide-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3.4vw, 50px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.slide-sub {
+  font-size: clamp(13px, 1.3vw, 17px);
+  color: var(--light);
+  font-style: italic;
+  margin-bottom: 22px;
+}
+
+/* ── DEFINITION BOX ──────────────────────────────────────────────── */
+.def {
+  background: var(--card);
+  border-left: 3px solid currentColor;
+  padding: 16px 22px;
+  border-radius: 0 6px 6px 0;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.75;
+  margin: 16px 0;
+}
+
+/* ── BULLET POINTS ───────────────────────────────────────────────── */
+.pts { list-style: none; margin: 10px 0; }
+.pts li {
+  padding: 11px 0 11px 26px;
+  position: relative;
+  font-size: clamp(14px, 1.4vw, 18px);
+  line-height: 1.65;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.pts li:last-child { border-bottom: none; }
+.pts li::before {
+  content: '▸';
+  position: absolute; left: 0;
+  color: currentColor;
+  opacity: 0.7;
+}
+.pts.g7  li::before { color: var(--g7);   }
+.pts.g10 li::before { color: var(--g10);  }
+.pts.g11 li::before { color: var(--g11);  }
+.pts.comp li::before { color: var(--comp); }
+
+/* inline highlights */
+.hl-g7   { color: var(--g7);    font-weight: 600; }
+.hl-g10  { color: var(--g10);   font-weight: 600; }
+.hl-g11  { color: var(--g11);   font-weight: 600; }
+.hl-comp { color: var(--comp);  font-weight: 600; }
+.hl-v    { color: var(--violet);font-weight: 600; }
+.dim     { color: var(--light); }
+.blank   { color: var(--muted); font-style: italic; }
+
+/* ── IMAGE AREA ───────────────────────────────────────────────────── */
+.img-area {
+  background: var(--card);
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 14px 18px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.img-area::before {
+  content: 'IMAGE';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(18px, 2.5vw, 32px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.04);
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* When real image is present */
+.img-area.has-img {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+.img-area.has-img::before { display: none; }
+.img-area.has-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 10px;
+  display: block;
+}
+.img-caption {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  z-index: 1;
+  max-width: 100%;
+}
+.img-caption strong {
+  color: var(--light);
+  font-weight: 500;
+}
+
+/* ── TWO COLUMN LAYOUT ────────────────────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── CARD ─────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.card-body {
+  font-size: clamp(12px, 1.2vw, 15px);
+  color: var(--light);
+  line-height: 1.65;
+}
+
+/* ── TABLE ────────────────────────────────────────────────────────── */
+.btable { width: 100%; border-collapse: collapse; margin-top: 16px; }
+.btable th {
+  background: var(--card);
+  padding: 12px 16px;
+  text-align: left;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(13px, 1.25vw, 16px);
+  font-weight: 700;
+  border-bottom: 2px solid var(--border);
+}
+.btable td {
+  padding: 11px 16px;
+  font-size: clamp(12px, 1.2vw, 15px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  line-height: 1.55;
+}
+
+/* ── FLOW ─────────────────────────────────────────────────────────── */
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+.flow-step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: clamp(12px, 1.2vw, 15px);
+  white-space: nowrap;
+}
+.flow-arr { color: var(--muted); font-size: 16px; }
+
+/* ── QUIZ ─────────────────────────────────────────────────────────── */
+.q-source {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--comp);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.qbox {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 22px;
+  font-size: clamp(13px, 1.3vw, 17px);
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: clamp(12px, 1.2vw, 15px);
+  transition: all 0.18s;
+  line-height: 1.5;
+  font-family: 'Source Serif 4', serif;
+}
+.opt:hover { border-color: var(--comp); color: var(--comp); }
+.opt.ok { border-color: var(--teal); background: rgba(46,196,182,0.07); color: var(--teal); }
+.opt.no { border-color: var(--red); background: rgba(230,57,70,0.07); color: var(--red); }
+.q-hint { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 10px; }
+
+/* ── SVG DIAGRAM AREA ─────────────────────────────────────────────── */
+.diagram { width: 100%; flex-shrink: 0; }
+
+/* ── SPLIT LAYOUT: text left, image right ─────────────────────────── */
+.split-slide {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+.split-text {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 44px 28px 80px 54px;
+  overflow: hidden;
+}
+.split-text.scrollable { overflow-y: auto; scrollbar-width: none; }
+.split-text.scrollable::-webkit-scrollbar { display: none; }
+.split-img {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: stretch;
+  padding: 32px 48px 80px 0;
+}
+.split-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 12px;
+}
+
+/* ── BOTTOM IMAGE: text top, image bottom (proportional) ──────────── */
+.cz.has-bottom-img {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 44px;
+  overflow: hidden;
+}
+.bottom-img-wrap {
+  flex: 1;
+  min-height: 0;
+  margin-top: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.bottom-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+  display: block;
+  border-radius: 12px;
+}
+
+/* ── IMAGE fills remaining vertical space in scrollable slides ────── */
+.img-flex {
+  flex: 1;
+  min-height: 120px;
+  max-height: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+.img-flex img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+/* ── UI CHROME ────────────────────────────────────────────────────── */
+.slide-counter {
+  position: fixed;
+  bottom: 24px; right: 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  z-index: 500;
+  letter-spacing: 0.1em;
+}
+.nav-row {
+  position: fixed;
+  bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 8px;
+  z-index: 500;
+}
+.nbtn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  transition: all 0.18s;
+}
+.nbtn:hover { border-color: var(--red); color: var(--red); }
+.nbtn.draw-on { border-color: var(--amber); color: var(--amber); }
+.fs-btn {
+  position: fixed;
+  top: 18px; right: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  z-index: 500;
+  transition: all 0.18s;
+}
+.fs-btn:hover { color: var(--red); border-color: var(--red); }
+
+/* section indicator top-left */
+.sec-indicator {
+  position: fixed;
+  top: 18px; left: 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  z-index: 500;
+  text-transform: uppercase;
+}
+
+/* progress pips */
+.pips {
+  position: fixed;
+  top: 50%; right: 14px;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 5px;
+  z-index: 500;
+}
+.pip {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pip.on { background: var(--red); transform: scale(1.6); }
+
+/* draw mode */
+#draw-canvas { position: fixed; inset: 0; z-index: 900; display: none; cursor: crosshair; }
+body.draw-mode #draw-canvas { display: block; }
+.draw-hint {
+  position: fixed;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--red); color: #fff;
+  padding: 5px 18px; border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  display: none; z-index: 950;
+}
+body.draw-mode .draw-hint { display: block; }
+
+/* spacer utility */
+.sp { display: block; }
+.big-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(60px, 8vw, 110px);
+  font-weight: 900;
+  opacity: 0.06;
+  position: absolute;
+  right: 40px; bottom: 60px;
+  line-height: 1;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div class="draw-hint">✏ DRAW MODE — A to toggle · C to clear</div>
+<canvas id="draw-canvas"></canvas>
+
+<div class="deck" id="deck">
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 01 — MASTER TITLE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide active" id="s1">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz" style="justify-content:center;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.35em;color:var(--muted);text-transform:uppercase;margin-bottom:18px;">Human Physiology</div>
+    <div style="font-family:'Playfair Display',serif;font-size:clamp(44px,6vw,88px);font-weight:900;line-height:1.0;color:var(--text);margin-bottom:10px;">
+      Working of<br>the <span style="color:var(--red);font-style:italic;">Heart</span>
+    </div>
+    <div style="font-size:clamp(15px,1.6vw,20px);color:var(--light);font-style:italic;margin-bottom:34px;line-height:1.5;">
+      A journey from Grade 7 curiosity<br>to NEET-level mastery
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <span class="grade-badge" style="background:rgba(244,197,66,0.12);color:var(--g7);">Grade 7</span>
+      <span style="color:var(--muted);font-size:18px;">→</span>
+      <span class="grade-badge" style="background:rgba(244,162,97,0.12);color:var(--g10);">Grade 10</span>
+      <span style="color:var(--muted);font-size:18px;">→</span>
+      <span class="grade-badge" style="background:rgba(46,196,182,0.12);color:var(--g11);">Grade 11</span>
+      <span style="color:var(--muted);font-size:18px;">→</span>
+      <span class="grade-badge" style="background:rgba(230,57,70,0.12);color:var(--comp);">NEET / Boards</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 02 — SECTION DIVIDER: GRADE 7
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide slide-divider" id="s2">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz" style="justify-content:center;">
+    <div class="section-num">Section 01</div>
+    <div class="section-title" style="color:var(--g7);">Grade 7<br>Foundations</div>
+    <div class="section-sub">What is the heart? Why do we need it?<br>The pump that never stops.</div>
+    <span class="grade-badge" style="background:rgba(244,197,66,0.12);color:var(--g7);">Ages 11–12 · Basic Concepts</span>
+    <div class="big-num" style="color:var(--g7);">07</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 03 — G7: WHAT IS THE HEART
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text">
+      <span class="slide-tag tag-g7">Grade 7 — Intro</span>
+      <div class="slide-title">What is the Heart?</div>
+      <div class="slide-sub">Your body's most tireless machine</div>
+      <div class="def" style="color:var(--g7);margin-bottom:18px;">
+        The heart is a <span class="hl-g7">hollow, muscular organ</span> that acts as a pump — pushing blood throughout the entire body through blood vessels.
+      </div>
+      <ul class="pts g7">
+        <li>Located in the <span class="hl-g7">chest cavity</span>, slightly left of midline</li>
+        <li>Size: roughly equal to your <span class="hl-g7">closed fist</span></li>
+        <li>Weight: approximately <span class="hl-g7">250–350 grams</span> in adults</li>
+        <li>Beats <span class="hl-g7">100,000 times</span> per day — ~70 per minute at rest</li>
+        <li>Protected by <span class="hl-g7">rib cage</span>, enclosed in <span class="hl-g7">pericardium</span></li>
+      </ul>
+    </div>
+    <div class="split-img">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/Gemini_Generated_Image_j3gyvzj3gyvzj3gy.png" alt="Heart position in chest cavity">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 04 — G7: THE PUMP CONCEPT
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz has-bottom-img" style="padding-bottom:80px;">
+    <span class="slide-tag tag-g7">Grade 7 — Concept</span>
+    <div class="slide-title">The Heart as a Pump</div>
+    <div class="slide-sub">Why does the body need pumping?</div>
+    <ul class="pts g7" style="margin-bottom:10px;">
+      <li>Every cell needs <span class="hl-g7">oxygen and nutrients</span> — heart delivers them via blood</li>
+      <li>Blood carries <span class="hl-g7">waste products</span> (CO₂, urea) away from cells</li>
+      <li>Heart <span class="hl-g7">contracts and relaxes</span> rhythmically — this is your heartbeat</li>
+      <li>Without circulation, cells would <span class="hl-g7">die within minutes</span></li>
+    </ul>
+    <div class="flow" style="margin:8px 0 10px;">
+      <span class="flow-step" style="border-color:var(--g7);color:var(--g7);">Heart</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step">Arteries</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step">Body Cells</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step">Veins</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step" style="border-color:var(--g7);color:var(--g7);">Heart</span>
+    </div>
+    <div class="bottom-img-wrap">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/ChatGPT%20Image%20Mar%2013%2C%202026%2C%2001_22_55%20PM.png" alt="Heart as pump - circulation diagram">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 05 — G7: BASIC STRUCTURE (4 CHAMBERS INTRO)
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text" style="flex:0 0 52%;">
+      <span class="slide-tag tag-g7">Grade 7 — Structure</span>
+      <div class="slide-title">Four Chambers<br>of the Heart</div>
+      <div class="two-col" style="margin-top:16px;gap:10px;">
+        <div class="card" style="border-top:2px solid var(--g7);">
+          <div class="card-title" style="color:var(--g7);">Right Atrium</div>
+          <div class="card-body">Receives <em>deoxygenated</em> blood from the body. Upper right.</div>
+        </div>
+        <div class="card" style="border-top:2px solid var(--red);">
+          <div class="card-title" style="color:var(--red);">Left Atrium</div>
+          <div class="card-body">Receives <em>oxygenated</em> blood from the lungs. Upper left.</div>
+        </div>
+        <div class="card" style="border-top:2px solid var(--g7);">
+          <div class="card-title" style="color:var(--g7);">Right Ventricle</div>
+          <div class="card-body">Pumps deoxygenated blood <em>to the lungs</em>. Lower right.</div>
+        </div>
+        <div class="card" style="border-top:2px solid var(--red);">
+          <div class="card-title" style="color:var(--red);">Left Ventricle</div>
+          <div class="card-body">Pumps oxygenated blood <em>to whole body</em>. <strong style="color:var(--text);">Thickest wall.</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="split-img" style="flex:0 0 48%;">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/ChatGPT%20Image%20Mar%2013%2C%202026%2C%2001_23_55%20PM.png" alt="Four chambers of the heart cross-section">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 06 — SECTION DIVIDER: GRADE 10
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide slide-divider" id="s6">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz" style="justify-content:center;">
+    <div class="section-num">Section 02</div>
+    <div class="section-title" style="color:var(--g10);">Grade 10<br>Structure &<br>Circulation</div>
+    <div class="section-sub">Valves, vessels, double circulation,<br>blood pressure — building the full picture.</div>
+    <span class="grade-badge" style="background:rgba(244,162,97,0.12);color:var(--g10);">Ages 15–16 · CBSE Board</span>
+    <div class="big-num" style="color:var(--g10);">10</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 07 — G10: DETAILED HEART STRUCTURE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text scrollable" style="flex:0 0 52%;">
+      <span class="slide-tag tag-g10">Grade 10 — Anatomy</span>
+      <div class="slide-title">Detailed Structure<br>of the Heart</div>
+      <ul class="pts g10" style="margin-top:12px;">
+        <li>Wall has <span class="hl-g10">3 layers</span>: Epicardium · Myocardium · Endocardium</li>
+        <li><span class="hl-g10">Septum</span> — divides right and left sides completely</li>
+        <li><span class="hl-g10">Tricuspid valve</span> — right AV valve (3 cusps)</li>
+        <li><span class="hl-g10">Bicuspid (Mitral)</span> — left AV valve (2 cusps)</li>
+        <li><span class="hl-g10">Semilunar valves</span> — at exits into pulmonary artery &amp; aorta</li>
+        <li><span class="hl-g10">Chordae tendineae</span> — strings preventing valve eversion</li>
+        <li>Left ventricle wall is <span class="hl-g10">3× thicker</span> than right</li>
+      </ul>
+    </div>
+    <div class="split-img" style="flex:0 0 48%;">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/Gemini_Generated_Image_ru5q70ru5q70ru5q.png" alt="Detailed heart anatomy with valves">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 08 — G10: BLOOD VESSELS
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz has-bottom-img" style="padding-bottom:80px;">
+    <span class="slide-tag tag-g10">Grade 10 — Vessels</span>
+    <div class="slide-title">Types of Blood Vessels</div>
+    <table class="btable" style="margin-top:12px;">
+      <thead>
+        <tr>
+          <th style="color:var(--g10);">Feature</th>
+          <th style="color:var(--red);">Artery</th>
+          <th style="color:var(--teal);">Vein</th>
+          <th style="color:var(--amber);">Capillary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dim">Direction</td><td>Away from heart</td><td>Toward heart</td><td>Between A &amp; V</td></tr>
+        <tr><td class="dim">Blood</td><td>Oxygenated*</td><td>Deoxygenated*</td><td>Exchange site</td></tr>
+        <tr><td class="dim">Wall</td><td><span class="hl-g10">Thick, elastic</span></td><td>Thin</td><td>1 cell thick</td></tr>
+        <tr><td class="dim">Valves</td><td>None</td><td>Present ✓</td><td>None</td></tr>
+        <tr><td class="dim">Pressure</td><td><span class="hl-comp">High</span></td><td>Low</td><td>Very low</td></tr>
+      </tbody>
+    </table>
+    <div class="bottom-img-wrap">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/Gemini_Generated_Image_o8xa1mo8xa1mo8xa.png" alt="Types of blood vessels - artery vein capillary cross-sections">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 09 — G10: DOUBLE CIRCULATION
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text" style="flex:0 0 50%;">
+      <span class="slide-tag tag-g10">Grade 10 — Circulation</span>
+      <div class="slide-title">Double<br>Circulation</div>
+      <div class="slide-sub">Blood passes through the heart twice per circuit</div>
+      <div class="card" style="border-left:3px solid #4fc3f7;margin-bottom:10px;">
+        <div class="card-title" style="color:#4fc3f7;">① Pulmonary</div>
+        <div class="card-body">Right ventricle → Pulmonary artery → Lungs → Pulmonary vein → Left atrium</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--red);margin-bottom:14px;">
+        <div class="card-title" style="color:var(--red);">② Systemic</div>
+        <div class="card-body">Left ventricle → Aorta → Body organs → Venae Cavae → Right atrium</div>
+      </div>
+      <ul class="pts g10">
+        <li>Oxygenated and deoxygenated blood <span class="hl-g10">never mix</span></li>
+        <li>Pulmonary <span class="hl-comp">artery</span> = deoxygenated · Pulmonary <span class="hl-comp">vein</span> = oxygenated</li>
+      </ul>
+    </div>
+    <div class="split-img" style="flex:0 0 50%;">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/Gemini_Generated_Image_u4ploeu4ploeu4pl.png" alt="Double circulation - pulmonary and systemic loops">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 10 — G10: CARDIAC CYCLE BASICS
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz">
+    <span class="slide-tag tag-g10">Grade 10 — Cycle</span>
+    <div class="slide-title">Cardiac Cycle<br>— Basics</div>
+
+    <div class="def" style="color:var(--g10);">
+      One complete heartbeat = one <span class="hl-g10">cardiac cycle</span>. Consists of contraction (<span class="hl-g10">systole</span>) and relaxation (<span class="hl-g10">diastole</span>).
+    </div>
+
+    <div class="flow" style="margin:16px 0;">
+      <span class="flow-step" style="border-color:var(--g10);color:var(--g10);">Atrial Systole</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step" style="border-color:var(--red);color:var(--red);">Ventricular Systole</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step" style="border-color:var(--muted);">Diastole</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-step" style="border-color:var(--g10);color:var(--g10);">Repeat</span>
+    </div>
+
+    <ul class="pts g10">
+      <li><span class="hl-g10">Systole</span> — heart muscle contracts, blood is pushed out</li>
+      <li><span class="hl-g10">Diastole</span> — heart muscle relaxes, chambers fill with blood</li>
+      <li>Duration of one cardiac cycle: <span class="hl-g10">0.8 seconds</span> at 75 bpm</li>
+      <li>Normal heart rate: <span class="hl-g10">60–100 beats/min</span> (resting adult)</li>
+      <li><span class="hl-comp">Tachycardia</span> → heart rate &gt;100 &nbsp;|&nbsp; <span class="hl-comp">Bradycardia</span> → heart rate &lt;60</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 11 — G10: BLOOD PRESSURE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text" style="flex:0 0 54%;">
+      <span class="slide-tag tag-g10">Grade 10 — Blood Pressure</span>
+      <div class="slide-title">Blood Pressure</div>
+      <div class="def" style="color:var(--g10);margin-bottom:14px;">
+        Force exerted by blood on vessel walls. Measured with a <span class="hl-g10">sphygmomanometer</span>.
+      </div>
+      <ul class="pts g10">
+        <li><span class="hl-g10">Systolic</span> — during ventricular contraction. Normal: <span class="hl-comp">120 mmHg</span></li>
+        <li><span class="hl-g10">Diastolic</span> — during ventricular relaxation. Normal: <span class="hl-comp">80 mmHg</span></li>
+        <li>Written as <span class="hl-comp">120/80 mmHg</span></li>
+        <li><span class="hl-comp">Hypertension</span> ≥ 140/90 · <span class="hl-comp">Hypotension</span> &lt; 90/60</li>
+        <li>Highest in <span class="hl-g10">aorta</span>, drops progressively toward veins</li>
+      </ul>
+    </div>
+    <div class="split-img" style="flex:0 0 46%;">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/ChatGPT%20Image%20Mar%2013%2C%202026%2C%2002_05_03%20PM.png" alt="Blood pressure sphygmomanometer and pressure gradient">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 12 — SECTION DIVIDER: GRADE 11
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide slide-divider" id="s12">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz" style="justify-content:center;">
+    <div class="section-num">Section 03</div>
+    <div class="section-title" style="color:var(--g11);">Grade 11<br>Deep Dive</div>
+    <div class="section-sub">Conduction system, ECG, cardiac output,<br>Starling's law — the complete physiology.</div>
+    <span class="grade-badge" style="background:rgba(46,196,182,0.12);color:var(--g11);">Ages 16–17 · NCERT Part II</span>
+    <div class="big-num" style="color:var(--g11);">11</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 13 — G11: CARDIAC CONDUCTION SYSTEM
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s13">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text scrollable" style="flex:0 0 50%;">
+      <span class="slide-tag tag-g11">Grade 11 — Conduction</span>
+      <div class="slide-title">Cardiac Conduction<br>System</div>
+      <div class="slide-sub">The heart's own electrical wiring</div>
+      <ul class="pts g11">
+        <li><span class="hl-g11">SA Node</span> — right atrium wall. The <span class="hl-g11">pacemaker</span>. Generates impulse spontaneously.</li>
+        <li><span class="hl-g11">AV Node</span> — atria–ventricle junction. <span class="hl-g11">~0.1 sec delay</span> for atria to complete.</li>
+        <li><span class="hl-g11">Bundle of His</span> — through the septum to ventricles.</li>
+        <li><span class="hl-g11">Bundle Branches</span> — Right &amp; Left along ventricular walls.</li>
+        <li><span class="hl-g11">Purkinje Fibres</span> — fine terminals causing simultaneous ventricular contraction.</li>
+        <li>Heart is <span class="hl-g11">myogenic</span> — no nerve input needed to start</li>
+      </ul>
+    </div>
+    <div class="split-img" style="flex:0 0 50%;">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/ChatGPT%20Image%20Mar%2013%2C%202026%2C%2002_06_08%20PM.png" alt="Cardiac conduction pathway SA AV node Bundle of His Purkinje">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 14 — G11: CARDIAC CYCLE DETAILED
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s14">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz scrollable">
+    <span class="slide-tag tag-g11">Grade 11 — Detailed Cycle</span>
+    <div class="slide-title">Cardiac Cycle<br>— Detailed Phases</div>
+    <div class="slide-sub">Duration: 0.8 sec at 75 bpm</div>
+
+    <table class="btable">
+      <thead>
+        <tr>
+          <th style="color:var(--g11);">Phase</th>
+          <th style="color:var(--g11);">Event</th>
+          <th style="color:var(--g11);">Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="hl-g11">Atrial Systole</span></td><td>Atria contract → blood into ventricles</td><td>0.1 sec</td></tr>
+        <tr><td><span class="hl-g11">Ventricular Systole</span></td><td>Ventricles contract → blood into aorta &amp; pulmonary artery</td><td>0.3 sec</td></tr>
+        <tr><td><span class="hl-g11">Joint Diastole</span></td><td>All chambers relax → ventricles fill passively</td><td>0.4 sec</td></tr>
+      </tbody>
+    </table>
+
+    <ul class="pts g11" style="margin-top:14px;">
+      <li><span class="hl-g11">Isovolumic contraction</span> — ventricle contracts but volume unchanged (all valves shut)</li>
+      <li><span class="hl-g11">Ejection phase</span> — semilunar valves open, blood ejected out</li>
+      <li><span class="hl-g11">Isovolumic relaxation</span> — ventricle relaxes, all valves closed again</li>
+      <li><span class="hl-g11">Filling phase</span> — AV valves open, blood flows in passively (70%) + atrial kick (30%)</li>
+      <li>End Diastolic Volume (EDV): <span class="hl-g11">~120 mL</span> &nbsp;|&nbsp; End Systolic Volume (ESV): <span class="hl-g11">~50 mL</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 15 — G11: ECG
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s15">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz has-bottom-img" style="padding-bottom:80px;">
+    <span class="slide-tag tag-g11">Grade 11 — ECG</span>
+    <div class="slide-title">Electrocardiogram (ECG)</div>
+    <div class="slide-sub">Recording the heart's electrical activity</div>
+    <table class="btable" style="margin-top:8px;">
+      <thead>
+        <tr>
+          <th style="color:var(--g11);">Wave</th>
+          <th style="color:var(--g11);">Represents</th>
+          <th style="color:var(--g11);">Clinical Significance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="hl-g11">P wave</span></td><td>Atrial depolarisation</td><td>Absent → SA node issue</td></tr>
+        <tr><td><span class="hl-g11">QRS complex</span></td><td>Ventricular depolarisation</td><td>Wide → bundle branch block</td></tr>
+        <tr><td><span class="hl-g11">T wave</span></td><td>Ventricular repolarisation</td><td>Inverted → ischaemia</td></tr>
+        <tr><td><span class="hl-g11">P-R interval</span></td><td>AV node conduction</td><td>Prolonged → heart block</td></tr>
+      </tbody>
+    </table>
+    <div class="bottom-img-wrap">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/ChatGPT%20Image%20Mar%2013%2C%202026%2C%2002_07_33%20PM.png" alt="ECG trace P wave QRS complex T wave">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 16 — G11: HEART SOUNDS
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s16">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="split-slide">
+    <div class="split-text" style="flex:0 0 54%;">
+      <span class="slide-tag tag-g11">Grade 11 — Sounds</span>
+      <div class="slide-title">Heart Sounds<br>"Lub — Dub"</div>
+      <div class="two-col" style="margin-top:14px;gap:10px;">
+        <div class="card" style="border-top:2px solid var(--g11);padding:16px;">
+          <div class="card-title" style="color:var(--g11);font-size:clamp(15px,1.6vw,22px);">"Lub" (S1)</div>
+          <div class="card-body">Closure of <strong style="color:var(--text);">AV valves</strong> (Mitral + Tricuspid) at start of ventricular systole. Longer, low-pitched.</div>
+        </div>
+        <div class="card" style="border-top:2px solid var(--red);padding:16px;">
+          <div class="card-title" style="color:var(--red);font-size:clamp(15px,1.6vw,22px);">"Dub" (S2)</div>
+          <div class="card-body">Closure of <strong style="color:var(--text);">Semilunar valves</strong> (Aortic + Pulmonary) at end of systole. Short, sharp.</div>
+        </div>
+      </div>
+      <ul class="pts g11" style="margin-top:12px;">
+        <li>S3, S4 = <span class="hl-comp">abnormal</span> — heart failure / stiff ventricle</li>
+        <li><span class="hl-g11">Murmurs</span> — turbulent flow through leaky/stenotic valves</li>
+        <li>4 auscultation points — fill during class</li>
+      </ul>
+    </div>
+    <div class="split-img" style="flex:0 0 46%;">
+      <img src="https://raw.githubusercontent.com/akshaygaur111/working-of-heart/main/images/ChatGPT%20Image%20Mar%2013%2C%202026%2C%2002_08_43%20PM.png" alt="Auscultation points on chest for heart sounds">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 17 — G11: CARDIAC OUTPUT
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s17">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz">
+    <span class="slide-tag tag-g11">Grade 11 — Output</span>
+    <div class="slide-title">Cardiac Output &<br>Starling's Law</div>
+
+    <div class="def" style="color:var(--g11);font-size:clamp(15px,1.5vw,19px);">
+      <strong>CO = Stroke Volume × Heart Rate</strong><br>
+      <span style="font-size:0.85em;color:var(--light);">Normal: 70 mL × 75 bpm = <span class="hl-g11">5.25 L/min</span></span>
+    </div>
+
+    <ul class="pts g11">
+      <li><span class="hl-g11">Stroke Volume (SV)</span> — blood ejected per beat = EDV − ESV ≈ 70 mL</li>
+      <li><span class="hl-g11">Ejection Fraction</span> — SV/EDV × 100 = ~58–65% (normal). Below 40% = heart failure.</li>
+      <li><span class="hl-g11">Starling's Law</span> — "the more the heart is filled during diastole, the greater the force of contraction" (within limits)</li>
+      <li>During exercise CO can rise to <span class="hl-comp">20–25 L/min</span> in trained athletes</li>
+      <li><span class="hl-g11">Preload</span> — venous return (filling). <span class="hl-g11">Afterload</span> — resistance heart pumps against.</li>
+      <li>Frank-Starling mechanism ensures both ventricles pump <span class="hl-g11">equal volumes</span> despite variations</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 18 — SECTION DIVIDER: COMPETITIVE
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide slide-divider" id="s18">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz" style="justify-content:center;">
+    <div class="section-num">Section 04</div>
+    <div class="section-title" style="color:var(--comp);">NEET &<br>Competitive<br>Exams</div>
+    <div class="section-sub">High-yield facts, tricky MCQs,<br>and the errors that cost marks.</div>
+    <span class="grade-badge" style="background:rgba(230,57,70,0.12);color:var(--comp);">NEET · AIIMS · JEE Biology</span>
+    <div class="big-num" style="color:var(--comp);">NEET</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 19 — HIGH YIELD FACTS
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s19">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz scrollable">
+    <span class="slide-tag tag-comp">High Yield</span>
+    <div class="slide-title">Must-Know Facts<br>for NEET</div>
+
+    <ul class="pts comp">
+      <li><span class="hl-comp">Pulmonary artery</span> carries deoxygenated blood; <span class="hl-comp">pulmonary vein</span> carries oxygenated — most common trick question</li>
+      <li>SA node = pacemaker; <span class="hl-comp">inherent rate ~70–80 bpm</span>; AV node backup = 40–60 bpm; Purkinje = 20–40 bpm</li>
+      <li>Heart is <span class="hl-comp">myogenic</span> — impulse originates in cardiac muscle itself, not from the brain</li>
+      <li>Normal ECG: P→QRS→T. <span class="hl-comp">Atrial repolarisation</span> hidden within QRS complex</li>
+      <li>Left ventricle wall thickness: <span class="hl-comp">~10–15 mm</span>; Right ventricle: ~3–5 mm</li>
+      <li>Chordae tendineae prevent <span class="hl-comp">AV valve eversion</span> (not semilunar valves)</li>
+      <li>During ventricular systole, AV valves <span class="hl-comp">close</span> (S1), semilunar valves <span class="hl-comp">open</span></li>
+      <li>During ventricular diastole, AV valves <span class="hl-comp">open</span>, semilunar valves <span class="hl-comp">close</span> (S2)</li>
+      <li>Coronary arteries supply blood to <span class="hl-comp">heart muscle itself</span> — arise from base of aorta</li>
+      <li>Lymph from interstitial fluid → lymph capillaries → lymphatic vessels → <span class="hl-comp">subclavian vein</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 20 — NEET MCQ 01
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s20">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz">
+    <div class="q-source">NEET 2019</div>
+    <div class="slide-title" style="font-size:clamp(22px,2.6vw,36px);margin-bottom:14px;">MCQ — 01</div>
+
+    <div class="qbox">
+      Which of the following is <strong>incorrect</strong> regarding the cardiac cycle?<br><br>
+      The duration of atrial systole, ventricular systole, and complete cardiac cycle are <strong>0.1 sec, 0.3 sec, and 0.8 sec</strong> respectively.
+    </div>
+
+    <div class="opts">
+      <div class="opt" onclick="qa(this,'no')">(a) Duration of atrial systole = 0.1 sec — True</div>
+      <div class="opt" onclick="qa(this,'no')">(b) Duration of ventricular systole = 0.3 sec — True</div>
+      <div class="opt" onclick="qa(this,'no')">(c) Complete cardiac cycle = 0.8 sec — True</div>
+      <div class="opt" onclick="qa(this,'ok')">(d) All statements above are correct — This is NOT incorrect</div>
+    </div>
+    <p class="q-hint">Concept: cardiac cycle durations are standard board values — must be memorised exactly</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 21 — NEET MCQ 02
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s21">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz">
+    <div class="q-source">NEET 2020</div>
+    <div class="slide-title" style="font-size:clamp(22px,2.6vw,36px);margin-bottom:14px;">MCQ — 02</div>
+
+    <div class="qbox">
+      Which of the following statements about the <strong>SA node</strong> is <strong>correct</strong>?
+    </div>
+
+    <div class="opts">
+      <div class="opt" onclick="qa(this,'no')">(a) Located at the junction of the right atrium and right ventricle</div>
+      <div class="opt" onclick="qa(this,'ok')">(b) Acts as the pacemaker of the heart and generates impulses at ~70–75 per minute</div>
+      <div class="opt" onclick="qa(this,'no')">(c) The impulse from SA node directly reaches Purkinje fibres without passing AV node</div>
+      <div class="opt" onclick="qa(this,'no')">(d) SA node requires nerve impulse from the brain to initiate each heartbeat</div>
+    </div>
+    <p class="q-hint">SA node is in the right atrium wall (not AV junction). Heart is myogenic — no brain trigger needed.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 22 — NEET MCQ 03
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s22">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz">
+    <div class="q-source">NEET 2022</div>
+    <div class="slide-title" style="font-size:clamp(22px,2.6vw,36px);margin-bottom:14px;">MCQ — 03</div>
+
+    <div class="qbox">
+      Identify the <strong>correct sequence</strong> of events in the cardiac conduction system:
+    </div>
+
+    <div class="opts">
+      <div class="opt" onclick="qa(this,'no')">(a) AV node → SA node → Bundle of His → Purkinje fibres</div>
+      <div class="opt" onclick="qa(this,'ok')">(b) SA node → AV node → Bundle of His → Bundle branches → Purkinje fibres</div>
+      <div class="opt" onclick="qa(this,'no')">(c) SA node → Bundle of His → AV node → Purkinje fibres</div>
+      <div class="opt" onclick="qa(this,'no')">(d) SA node → AV node → Purkinje fibres → Bundle of His</div>
+    </div>
+    <p class="q-hint">Sequence: SA → AV (delay) → Bundle of His → L+R branches → Purkinje. Order never changes.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 23 — NEET MCQ 04
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s23">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz">
+    <div class="q-source">NEET 2021</div>
+    <div class="slide-title" style="font-size:clamp(22px,2.6vw,36px);margin-bottom:14px;">MCQ — 04</div>
+
+    <div class="qbox">
+      During a <strong>cardiac cycle</strong>, the "lub" sound is produced due to:
+    </div>
+
+    <div class="opts">
+      <div class="opt" onclick="qa(this,'no')">(a) Closure of semilunar valves at the end of ventricular systole</div>
+      <div class="opt" onclick="qa(this,'ok')">(b) Closure of bicuspid and tricuspid valves at the beginning of ventricular systole</div>
+      <div class="opt" onclick="qa(this,'no')">(c) Opening of aortic and pulmonary valves</div>
+      <div class="opt" onclick="qa(this,'no')">(d) Opening of mitral valve allowing blood into left ventricle</div>
+    </div>
+    <p class="q-hint">S1 (lub) = AV valves CLOSE. S2 (dub) = Semilunar valves CLOSE. Valves closing makes sound, not opening.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SLIDE 24 — RECAPITULATION MIND MAP
+═══════════════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s24">
+  <div class="tz"><div class="tz-label">teacher zone</div></div>
+  <div class="cz scrollable" style="justify-content:flex-start;padding-top:44px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.35em;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">End of Chapter</div>
+    <div class="slide-title" style="margin-bottom:20px;">Recapitulation</div>
+
+    <svg width="100%" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <!-- CENTER -->
+      <rect x="245" y="170" width="190" height="50" rx="8" fill="#16161f" stroke="#e63946" stroke-width="2"/>
+      <text x="340" y="196" text-anchor="middle" fill="#e4e4f0" font-family="Playfair Display, serif" font-size="15" font-weight="700">Working of Heart</text>
+      <text x="340" y="213" text-anchor="middle" fill="#8a8aaa" font-family="JetBrains Mono, monospace" font-size="10">core concept</text>
+
+      <!-- G7 branch — upper left -->
+      <line x1="250" y1="180" x2="130" y2="100" stroke="#4a4a68" stroke-width="1.5"/>
+      <rect x="46" y="70" width="120" height="36" rx="5" fill="#12121a" stroke="#f4c542" stroke-width="1.5"/>
+      <text x="106" y="88" text-anchor="middle" fill="#f4c542" font-family="Playfair Display,serif" font-size="12" font-weight="700">Grade 7</text>
+      <text x="106" y="101" text-anchor="middle" fill="#4a4a68" font-family="JetBrains Mono" font-size="9">Pump · 4 Chambers</text>
+
+      <!-- G10 branch — lower left -->
+      <line x1="250" y1="210" x2="130" y2="290" stroke="#4a4a68" stroke-width="1.5"/>
+      <rect x="40" y="266" width="130" height="36" rx="5" fill="#12121a" stroke="#f4a261" stroke-width="1.5"/>
+      <text x="105" y="284" text-anchor="middle" fill="#f4a261" font-family="Playfair Display,serif" font-size="12" font-weight="700">Grade 10</text>
+      <text x="105" y="297" text-anchor="middle" fill="#4a4a68" font-family="JetBrains Mono" font-size="9">Valves · Double Circ.</text>
+
+      <!-- G11 branch — upper right -->
+      <line x1="435" y1="180" x2="555" y2="100" stroke="#4a4a68" stroke-width="1.5"/>
+      <rect x="510" y="70" width="126" height="36" rx="5" fill="#12121a" stroke="#2ec4b6" stroke-width="1.5"/>
+      <text x="573" y="88" text-anchor="middle" fill="#2ec4b6" font-family="Playfair Display,serif" font-size="12" font-weight="700">Grade 11</text>
+      <text x="573" y="101" text-anchor="middle" fill="#4a4a68" font-family="JetBrains Mono" font-size="9">ECG · SA node · CO</text>
+
+      <!-- Competitive branch — lower right -->
+      <line x1="435" y1="210" x2="555" y2="290" stroke="#4a4a68" stroke-width="1.5"/>
+      <rect x="504" y="266" width="140" height="36" rx="5" fill="#12121a" stroke="#e63946" stroke-width="1.5"/>
+      <text x="574" y="284" text-anchor="middle" fill="#e63946" font-family="Playfair Display,serif" font-size="12" font-weight="700">NEET</text>
+      <text x="574" y="297" text-anchor="middle" fill="#4a4a68" font-family="JetBrains Mono" font-size="9">MCQs · High Yield</text>
+
+      <!-- Sub-items G7 -->
+      <text x="106" y="125" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Pump concept</text>
+      <text x="106" y="140" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Basic chambers</text>
+      <text x="106" y="155" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Blood flow</text>
+
+      <!-- Sub-items G10 -->
+      <text x="100" y="322" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Valves &amp; walls</text>
+      <text x="100" y="337" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Double circulation</text>
+      <text x="100" y="352" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Blood pressure</text>
+
+      <!-- Sub-items G11 -->
+      <text x="573" y="125" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">SA/AV node</text>
+      <text x="573" y="140" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">ECG waves P/QRS/T</text>
+      <text x="573" y="155" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Cardiac output</text>
+
+      <!-- Sub-items Comp -->
+      <text x="574" y="322" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">Tricky exceptions</text>
+      <text x="574" y="337" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">MCQ patterns</text>
+      <text x="574" y="352" text-anchor="middle" fill="#4a4a68" font-family="Source Serif 4" font-size="10">High-yield facts</text>
+
+      <!-- connecting dot top and bottom -->
+      <line x1="340" y1="220" x2="340" y2="370" stroke="#4a4a68" stroke-width="1" stroke-dasharray="3 4"/>
+      <rect x="245" y="370" width="190" height="34" rx="5" fill="#12121a" stroke="#4a4a68" stroke-width="1"/>
+      <text x="340" y="392" text-anchor="middle" fill="#4a4a68" font-family="JetBrains Mono" font-size="10">Key: Myogenic · Double Circ · SA Pacemaker</text>
+    </svg>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- ── UI CHROME ──────────────────────────────────────────────────────── -->
+<div class="sec-indicator" id="sec-ind">Grade 7</div>
+<div class="slide-counter" id="sc">01 / 24</div>
+<div class="pips" id="pips"></div>
+<button class="fs-btn" onclick="toggleFS()">⛶ Fullscreen</button>
+
+<div class="nav-row">
+  <button class="nbtn" onclick="go(-1)">← Prev</button>
+  <button class="nbtn" id="drawBtn" onclick="toggleDraw()">✏ Annotate</button>
+  <button class="nbtn" onclick="clearDraw()">⊘ Clear</button>
+  <button class="nbtn" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+// ── SECTION LABELS ──────────────────────────────────────────────────
+const sectionMap = {
+  1:'Overview', 2:'Grade 7', 3:'Grade 7', 4:'Grade 7', 5:'Grade 7',
+  6:'Grade 10', 7:'Grade 10', 8:'Grade 10', 9:'Grade 10', 10:'Grade 10', 11:'Grade 10',
+  12:'Grade 11', 13:'Grade 11', 14:'Grade 11', 15:'Grade 11', 16:'Grade 11', 17:'Grade 11',
+  18:'NEET', 19:'NEET', 20:'NEET', 21:'NEET', 22:'NEET', 23:'NEET', 24:'Summary'
+};
+
+// ── NAVIGATION STATE ────────────────────────────────────────────────
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+const scEl = document.getElementById('sc');
+const secEl = document.getElementById('sec-ind');
+const pipsEl = document.getElementById('pips');
+
+// Build pips
+for(let i=0;i<N;i++){
+  const d = document.createElement('div');
+  d.className = 'pip'+(i===0?' on':'');
+  d.title = `Slide ${i+1}`;
+  d.addEventListener('click', ()=>showSlide(i));
+  pipsEl.appendChild(d);
+}
+
+function showSlide(n){
+  slides[cur].classList.remove('active');
+  cur = ((n % N) + N) % N;
+  slides[cur].classList.add('active');
+  scEl.textContent = String(cur+1).padStart(2,'0') + ' / ' + String(N).padStart(2,'0');
+  secEl.textContent = sectionMap[cur+1] || '';
+  document.querySelectorAll('.pip').forEach((p,i) => p.classList.toggle('on', i===cur));
+}
+
+function go(d){ showSlide(cur+d); }
+
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') { e.preventDefault(); go(1); }
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') { e.preventDefault(); go(-1); }
+  if(e.key.toLowerCase()==='a') toggleDraw();
+  if(e.key.toLowerCase()==='c') clearDraw();
+  if(e.key.toLowerCase()==='f') toggleFS();
+});
+
+// ── DRAW CANVAS ─────────────────────────────────────────────────────
+const canvas = document.getElementById('draw-canvas');
+const ctx = canvas.getContext('2d');
+let drawing = false, drawMode = false;
+let drawColor = '#f4c542';
+
+function resizeDC(){
+  const id = ctx.getImageData(0,0,canvas.width,canvas.height);
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  ctx.putImageData(id,0,0);
+  applyCtx();
+}
+function applyCtx(){
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = drawColor;
+  ctx.lineWidth = 3;
+}
+resizeDC();
+window.addEventListener('resize', resizeDC);
+
+function toggleDraw(){
+  drawMode = !drawMode;
+  document.body.classList.toggle('draw-mode', drawMode);
+  document.getElementById('drawBtn').classList.toggle('draw-on', drawMode);
+}
+function clearDraw(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
+
+function getPos(e){
+  return e.touches
+    ? {x: e.touches[0].clientX, y: e.touches[0].clientY}
+    : {x: e.clientX, y: e.clientY};
+}
+canvas.addEventListener('mousedown', e=>{ if(!drawMode)return; drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
+canvas.addEventListener('mousemove', e=>{ if(!drawMode||!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+canvas.addEventListener('mouseup', ()=>{ drawing=false; });
+canvas.addEventListener('mouseleave', ()=>{ drawing=false; });
+canvas.addEventListener('touchstart', e=>{ if(!drawMode)return; e.preventDefault(); drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); },{passive:false});
+canvas.addEventListener('touchmove', e=>{ if(!drawMode||!drawing)return; e.preventDefault(); const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
+canvas.addEventListener('touchend', ()=>{ drawing=false; });
+
+// ── FULLSCREEN ───────────────────────────────────────────────────────
+function toggleFS(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────────
+function qa(el, result){
+  el.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('ok','no'));
+  el.classList.add(result);
+}
+</script>
+</body>
+</html>
