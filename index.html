@@ -30,32 +30,32 @@
   --comp:  #e63946;
 }
 
-html, body {
-  width: 100vw; height: 100vh;
+html {
+  width: 100%; height: 100%;
   overflow: hidden;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Source Serif 4', Georgia, serif;
 }
 
 /* ── SCALE-TO-FIT STAGE (locks 1280×720, scales to any screen) ────── */
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0; padding: 0;
   background: #000;
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
 }
 #stage {
   width: 1280px;
   height: 720px;
-  position: relative;
-  flex-shrink: 0;
-  transform-origin: center center;
+  position: absolute;
+  top: 0; left: 0;
+  transform-origin: 0 0;
   background: var(--bg);
   overflow: hidden;
 }
-/* deck fills stage */
-.deck {
+/* deck fills stage exactly */
+#deck {
   position: absolute;
   inset: 0;
   width: 1280px;
@@ -86,7 +86,6 @@ body {
   from { transform: rotate(-20deg); }
   to   { transform: rotate(20deg); }
 }
-.deck { position: relative; width: 100vw; height: 100vh; }
 
 .slide {
   position: absolute; inset: 0;
@@ -1258,7 +1257,7 @@ body.draw-mode .draw-hint { display: block; }
 <script>
 // ═══════════════════════════════════════════════════════════
 // SCALE-TO-FIT ENGINE
-// Always renders at 1280×720, scaled to fill any screen
+// Locks canvas at 1280×720, scales + centers on any screen
 // ═══════════════════════════════════════════════════════════
 const DESIGN_W = 1280;
 const DESIGN_H = 720;
@@ -1268,14 +1267,15 @@ function scaleStage() {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const scale = Math.min(vw / DESIGN_W, vh / DESIGN_H);
-  stage.style.transform = `scale(${scale})`;
-  // center it
-  stage.style.marginLeft = `${(vw - DESIGN_W) / 2}px`;
-  stage.style.marginTop  = `${(vh - DESIGN_H) / 2}px`;
+  // offset so the scaled stage sits centered in viewport
+  const x = Math.round((vw - DESIGN_W * scale) / 2);
+  const y = Math.round((vh - DESIGN_H * scale) / 2);
+  // transform-origin is 0 0 (top-left), so we translate first then scale
+  stage.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
 }
 scaleStage();
 window.addEventListener('resize', scaleStage);
-window.addEventListener('orientationchange', () => setTimeout(scaleStage, 150));
+window.addEventListener('orientationchange', () => setTimeout(scaleStage, 200));
 
 // ── ROTATE HINT ─────────────────────────────────────────────
 const rotateHint = document.getElementById('rotate-hint');
